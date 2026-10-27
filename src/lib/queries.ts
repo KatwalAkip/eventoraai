@@ -107,7 +107,7 @@ export async function createEventWithDefaults(values: EventFormValues, opts: { i
   const event = unwrap(
     await supabase
       .from("events")
-      .insert({ ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" })
+      .insert({ ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" } as TablesInsert<"events">)
       .select()
       .single(),
   );

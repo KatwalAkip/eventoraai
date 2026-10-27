@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { CalendarHeart, LayoutDashboard, Lightbulb, LogOut, Menu, Plus, X } from "lucide-react";
-import { useState } from "react";
+import { LayoutDashboard, Lightbulb, LogOut, Menu, Plus, X } from "lucide-react";
+import { useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
@@ -99,7 +99,7 @@ export function AppShell() {
   );
 }
 
-export function PageHeader({ title, description, actions }: { title: string; description?: string; actions?: React.ReactNode }) {
+export function PageHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
@@ -111,4 +111,3 @@ export function PageHeader({ title, description, actions }: { title: string; des
   );
 }
 
-export { CalendarHeart };

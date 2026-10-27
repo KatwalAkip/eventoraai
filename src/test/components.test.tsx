@@ -83,7 +83,7 @@ describe("TaskChecklist", () => {
 
   it("marks overdue tasks with text, not only color", () => {
     render(<TaskChecklist tasks={tasks} today="2026-06-01" eventDate="2026-08-01" {...handlers()} />);
-    expect(screen.getByText("Overdue")).toBeInTheDocument();
+    expect(within(screen.getByRole("list", { name: "Tasks" })).getByText("Overdue")).toBeInTheDocument();
     expect(screen.getByText(/1 of 2 complete/)).toBeInTheDocument();
   });
 

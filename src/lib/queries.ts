@@ -104,13 +104,10 @@ async function currentUserId(): Promise<string> {
 /** Create an event plus a default budget split and suggested timeline. */
 export async function createEventWithDefaults(values: EventFormValues, opts: { isSample?: boolean; status?: "draft" | "planning" } = {}) {
   const user_id = await currentUserId();
-  const event = unwrap(
-    await supabase
-      .from("events")
-      .insert({ ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" } as TablesInsert<"events">)
-      .select()
-      .single(),
-  );
+  const row: TablesInsert<"events"> = { ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" };
+  const created = await supabase.from("events").insert(row).select().single();
+  if (created.error) throw new Error(created.error.message);
+  const event = created.data;
   const cats = allocateByPercent(values.total_budget, DEFAULT_SPLIT).map((c, i) => ({
     event_id: event.id,
     user_id,

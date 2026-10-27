@@ -1,11 +1,9 @@
 import { z } from "zod";
-import { CURRENCIES, EVENT_TYPES } from "./types";
-
-const eventTypeValues = EVENT_TYPES.map((e) => e.value) as [string, ...string[]];
+import { CURRENCIES } from "./types";
 
 export const eventFormSchema = z.object({
   title: z.string().trim().min(2, "Give your event a name (at least 2 characters)").max(120, "Keep the name under 120 characters"),
-  event_type: z.enum(eventTypeValues as [EventTypeValue, ...EventTypeValue[]], {
+  event_type: z.enum(["wedding", "birthday", "anniversary", "community", "corporate", "other"], {
     errorMap: () => ({ message: "Choose an event type" }),
   }),
   event_date: z
@@ -36,8 +34,6 @@ export const eventFormSchema = z.object({
   accessibility: z.string().trim().max(500).default(""),
   special_requests: z.string().trim().max(1000).default(""),
 });
-type EventTypeValue = "wedding" | "birthday" | "anniversary" | "community" | "corporate" | "other";
-void eventTypeValues;
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;
 

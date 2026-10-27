@@ -10,33 +10,160 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEventsEventIdRouteImport } from './routes/_authenticated/events.$eventId'
+import { Route as AuthenticatedEventsNewRouteImport } from './routes/_authenticated/events.new'
+import { Route as AuthenticatedEventsEventIdBudgetRouteImport } from './routes/_authenticated/events.$eventId.budget'
+import { Route as AuthenticatedEventsEventIdSettingsRouteImport } from './routes/_authenticated/events.$eventId.settings'
+import { Route as AuthenticatedEventsEventIdTimelineRouteImport } from './routes/_authenticated/events.$eventId.timeline'
+import { Route as AuthenticatedEventsEventIdVendorsRouteImport } from './routes/_authenticated/events.$eventId.vendors'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventsEventIdRoute =
+  AuthenticatedEventsEventIdRouteImport.update({
+    id: '/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEventsNewRoute = AuthenticatedEventsNewRouteImport.update({
+  id: '/events/new',
+  path: '/events/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventsEventIdBudgetRoute =
+  AuthenticatedEventsEventIdBudgetRouteImport.update({
+    id: '/budget',
+    path: '/budget',
+    getParentRoute: () => AuthenticatedEventsEventIdRoute,
+  } as any)
+const AuthenticatedEventsEventIdSettingsRoute =
+  AuthenticatedEventsEventIdSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedEventsEventIdRoute,
+  } as any)
+const AuthenticatedEventsEventIdTimelineRoute =
+  AuthenticatedEventsEventIdTimelineRouteImport.update({
+    id: '/timeline',
+    path: '/timeline',
+    getParentRoute: () => AuthenticatedEventsEventIdRoute,
+  } as any)
+const AuthenticatedEventsEventIdVendorsRoute =
+  AuthenticatedEventsEventIdVendorsRouteImport.update({
+    id: '/vendors',
+    path: '/vendors',
+    getParentRoute: () => AuthenticatedEventsEventIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events/$eventId': typeof AuthenticatedEventsEventIdRouteWithChildren
+  '/events/new': typeof AuthenticatedEventsNewRoute
+  '/events/$eventId/budget': typeof AuthenticatedEventsEventIdBudgetRoute
+  '/events/$eventId/settings': typeof AuthenticatedEventsEventIdSettingsRoute
+  '/events/$eventId/timeline': typeof AuthenticatedEventsEventIdTimelineRoute
+  '/events/$eventId/vendors': typeof AuthenticatedEventsEventIdVendorsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/events/$eventId': typeof AuthenticatedEventsEventIdRouteWithChildren
+  '/events/new': typeof AuthenticatedEventsNewRoute
+  '/events/$eventId/budget': typeof AuthenticatedEventsEventIdBudgetRoute
+  '/events/$eventId/settings': typeof AuthenticatedEventsEventIdSettingsRoute
+  '/events/$eventId/timeline': typeof AuthenticatedEventsEventIdTimelineRoute
+  '/events/$eventId/vendors': typeof AuthenticatedEventsEventIdVendorsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/events/$eventId': typeof AuthenticatedEventsEventIdRouteWithChildren
+  '/_authenticated/events/new': typeof AuthenticatedEventsNewRoute
+  '/_authenticated/events/$eventId/budget': typeof AuthenticatedEventsEventIdBudgetRoute
+  '/_authenticated/events/$eventId/settings': typeof AuthenticatedEventsEventIdSettingsRoute
+  '/_authenticated/events/$eventId/timeline': typeof AuthenticatedEventsEventIdTimelineRoute
+  '/_authenticated/events/$eventId/vendors': typeof AuthenticatedEventsEventIdVendorsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/dashboard'
+    | '/events/$eventId'
+    | '/events/new'
+    | '/events/$eventId/budget'
+    | '/events/$eventId/settings'
+    | '/events/$eventId/timeline'
+    | '/events/$eventId/vendors'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/dashboard'
+    | '/events/$eventId'
+    | '/events/new'
+    | '/events/$eventId/budget'
+    | '/events/$eventId/settings'
+    | '/events/$eventId/timeline'
+    | '/events/$eventId/vendors'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/events/$eventId'
+    | '/_authenticated/events/new'
+    | '/_authenticated/events/$eventId/budget'
+    | '/_authenticated/events/$eventId/settings'
+    | '/_authenticated/events/$eventId/timeline'
+    | '/_authenticated/events/$eventId/vendors'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +175,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events/$eventId': {
+      id: '/_authenticated/events/$eventId'
+      path: '/events/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof AuthenticatedEventsEventIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events/new': {
+      id: '/_authenticated/events/new'
+      path: '/events/new'
+      fullPath: '/events/new'
+      preLoaderRoute: typeof AuthenticatedEventsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events/$eventId/budget': {
+      id: '/_authenticated/events/$eventId/budget'
+      path: '/budget'
+      fullPath: '/events/$eventId/budget'
+      preLoaderRoute: typeof AuthenticatedEventsEventIdBudgetRouteImport
+      parentRoute: typeof AuthenticatedEventsEventIdRoute
+    }
+    '/_authenticated/events/$eventId/settings': {
+      id: '/_authenticated/events/$eventId/settings'
+      path: '/settings'
+      fullPath: '/events/$eventId/settings'
+      preLoaderRoute: typeof AuthenticatedEventsEventIdSettingsRouteImport
+      parentRoute: typeof AuthenticatedEventsEventIdRoute
+    }
+    '/_authenticated/events/$eventId/timeline': {
+      id: '/_authenticated/events/$eventId/timeline'
+      path: '/timeline'
+      fullPath: '/events/$eventId/timeline'
+      preLoaderRoute: typeof AuthenticatedEventsEventIdTimelineRouteImport
+      parentRoute: typeof AuthenticatedEventsEventIdRoute
+    }
+    '/_authenticated/events/$eventId/vendors': {
+      id: '/_authenticated/events/$eventId/vendors'
+      path: '/vendors'
+      fullPath: '/events/$eventId/vendors'
+      preLoaderRoute: typeof AuthenticatedEventsEventIdVendorsRouteImport
+      parentRoute: typeof AuthenticatedEventsEventIdRoute
+    }
   }
 }
 
+interface AuthenticatedEventsEventIdRouteChildren {
+  AuthenticatedEventsEventIdBudgetRoute: typeof AuthenticatedEventsEventIdBudgetRoute
+  AuthenticatedEventsEventIdSettingsRoute: typeof AuthenticatedEventsEventIdSettingsRoute
+  AuthenticatedEventsEventIdTimelineRoute: typeof AuthenticatedEventsEventIdTimelineRoute
+  AuthenticatedEventsEventIdVendorsRoute: typeof AuthenticatedEventsEventIdVendorsRoute
+}
+
+const AuthenticatedEventsEventIdRouteChildren: AuthenticatedEventsEventIdRouteChildren =
+  {
+    AuthenticatedEventsEventIdBudgetRoute:
+      AuthenticatedEventsEventIdBudgetRoute,
+    AuthenticatedEventsEventIdSettingsRoute:
+      AuthenticatedEventsEventIdSettingsRoute,
+    AuthenticatedEventsEventIdTimelineRoute:
+      AuthenticatedEventsEventIdTimelineRoute,
+    AuthenticatedEventsEventIdVendorsRoute:
+      AuthenticatedEventsEventIdVendorsRoute,
+  }
+
+const AuthenticatedEventsEventIdRouteWithChildren =
+  AuthenticatedEventsEventIdRoute._addFileChildren(
+    AuthenticatedEventsEventIdRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEventsEventIdRoute: typeof AuthenticatedEventsEventIdRouteWithChildren
+  AuthenticatedEventsNewRoute: typeof AuthenticatedEventsNewRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEventsEventIdRoute: AuthenticatedEventsEventIdRouteWithChildren,
+  AuthenticatedEventsNewRoute: AuthenticatedEventsNewRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

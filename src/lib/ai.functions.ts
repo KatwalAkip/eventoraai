@@ -40,7 +40,7 @@ export const generatePlan = createServerFn({ method: "POST" })
       .maybeSingle();
     if (error || !event) return { ok: false, error: "Event not found.", status: 404 };
     if (data.mode === "demo") return { ok: true, data: buildDemoPlan(event), source: "demo" };
-    if (!process.env.LOVABLE_API_KEY)
+    if (!process.env["LOVABLE_API_KEY"])
       return { ok: false, error: "Live AI is not configured. Use the sample plan instead.", status: 401 };
     if (!(await underRateLimit(supabase, userId)))
       return { ok: false, error: `You've reached ${HOURLY_LIMIT} AI generations this hour. Try again later.`, status: 429 };
@@ -70,7 +70,7 @@ export const generateIdeas = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ideaInput.parse(input))
   .handler(async ({ data, context }): Promise<AiResult<Idea[]>> => {
     if (data.mode === "demo") return { ok: true, data: sampleIdeas(data), source: "demo" };
-    if (!process.env.LOVABLE_API_KEY)
+    if (!process.env["LOVABLE_API_KEY"])
       return { ok: false, error: "Live AI is not configured. Showing sample ideas is available.", status: 401 };
     if (!(await underRateLimit(context.supabase, context.userId)))
       return { ok: false, error: `You've reached ${HOURLY_LIMIT} AI generations this hour. Try again later.`, status: 429 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, type FieldPath } from "react-hook-form";
+import { useForm, type FieldPath, type Resolver } from "react-hook-form";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ interface Props {
 export function EventForm({ initial, submitLabel = "Create event", wizard = true, busy, onSubmit }: Props) {
   const [step, setStep] = useState(0);
   const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventFormSchema),
+    resolver: zodResolver(eventFormSchema) as unknown as Resolver<EventFormValues>,
     defaultValues: { ...emptyEventForm, ...initial },
     mode: "onTouched",
   });
@@ -67,7 +67,7 @@ export function EventForm({ initial, submitLabel = "Create event", wizard = true
   });
 
   async function next() {
-    if (await trigger(STEPS[step].fields, { shouldFocus: true })) setStep((s) => s + 1);
+    if (await trigger(STEPS[step]!.fields, { shouldFocus: true })) setStep((s) => s + 1);
   }
 
   async function saveDraft() {

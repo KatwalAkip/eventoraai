@@ -7,9 +7,10 @@ import { generateTasks, todayIso, addDays } from "./timeline";
 import type { EventFormValues } from "./validation";
 import type { EventPlan } from "./plan-schema";
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
+function unwrap<R extends { data: unknown; error: { message: string } | null }>(res: R): NonNullable<R["data"]> {
   if (res.error) throw new Error(res.error.message);
-  return res.data as T;
+  if (res.data == null) throw new Error("Not found");
+  return res.data as NonNullable<R["data"]>;
 }
 
 export const eventsQuery = () =>
@@ -42,9 +43,10 @@ export const eventQuery = (id: string) =>
   queryOptions({
     queryKey: ["event", id],
     queryFn: async () => {
-      const event = unwrap(await supabase.from("events").select("*").eq("id", id).maybeSingle());
-      if (!event) throw new Error("Event not found");
-      return event;
+      const res = await supabase.from("events").select("*").eq("id", id).maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      if (!res.data) throw new Error("Event not found");
+      return res.data;
     },
   });
 
@@ -73,15 +75,17 @@ export const planQuery = (eventId: string) =>
   queryOptions({
     queryKey: ["plan", eventId],
     queryFn: async () =>
-      unwrap(
-        await supabase
-          .from("ai_plans")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("updated_at", { ascending: false })
-          .limit(1)
-          .maybeSingle(),
-      ),
+{
+      const res = await supabase
+        .from("ai_plans")
+        .select("*")
+        .eq("event_id", eventId)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      return res.data;
+    },
   });
 
 export const savedIdeasQuery = () =>
@@ -100,13 +104,10 @@ async function currentUserId(): Promise<string> {
 /** Create an event plus a default budget split and suggested timeline. */
 export async function createEventWithDefaults(values: EventFormValues, opts: { isSample?: boolean; status?: "draft" | "planning" } = {}) {
   const user_id = await currentUserId();
-  const event = unwrap(
-    await supabase
-      .from("events")
-      .insert({ ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" })
-      .select()
-      .single(),
-  );
+  const row: TablesInsert<"events"> = { ...values, start_time: values.start_time || null, user_id, is_sample: !!opts.isSample, status: opts.status ?? "planning" };
+  const created = await supabase.from("events").insert(row).select().single();
+  if (created.error) throw new Error(created.error.message);
+  const event = created.data;
   const cats = allocateByPercent(values.total_budget, DEFAULT_SPLIT).map((c, i) => ({
     event_id: event.id,
     user_id,
@@ -205,12 +206,12 @@ export function useRowMutations<T extends Table>(table: T, eventId: string) {
   });
   const update = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: TablesUpdate<T> }) =>
-      unwrap(await supabase.from(table).update(patch as never).eq("id", id).select().single()),
+      unwrap(await supabase.from(table).update(patch as never).eq("id" as never, id as never).select().single()),
     onSuccess: refresh,
     onError: onErr,
   });
   const remove = useMutation({
-    mutationFn: async (id: string) => unwrap(await supabase.from(table).delete().eq("id", id).select("id")),
+    mutationFn: async (id: string) => unwrap(await supabase.from(table).delete().eq("id" as never, id as never).select("id")),
     onSuccess: refresh,
     onError: onErr,
   });

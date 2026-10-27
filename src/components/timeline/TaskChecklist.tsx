@@ -86,7 +86,7 @@ export function TaskChecklist({ tasks, today, eventDate, onAdd, onUpdate, onDele
       <div className="flex flex-wrap gap-2" role="group" aria-label="Filter tasks">
         {(["all", "open", "done", "overdue"] as const).map((f) => (
           <Button key={f} size="sm" variant={filter === f ? "default" : "outline"} aria-pressed={filter === f} onClick={() => setFilter(f)}>
-            {f[0].toUpperCase() + f.slice(1)}
+            {f.charAt(0).toUpperCase() + f.slice(1)}
           </Button>
         ))}
         <label htmlFor="phase-filter" className="sr-only">Phase filter</label>

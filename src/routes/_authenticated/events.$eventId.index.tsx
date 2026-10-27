@@ -44,7 +44,7 @@ function sectionToText(plan: EventPlan, s: PlanSection): string {
 }
 function textToSection(plan: EventPlan, s: PlanSection, text: string): EventPlan {
   const lines = text.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, 20);
-  const split = (l: string, sep: string | RegExp) => { const i = l.search(sep); return i < 0 ? [l, ""] : [l.slice(0, i).trim(), l.slice(i + 1).trim()]; };
+  const split = (l: string, sep: string | RegExp): [string, string] => { const i = l.search(sep); return i < 0 ? [l, ""] : [l.slice(0, i).trim(), l.slice(i + 1).trim()]; };
   switch (s) {
     case "themes": return { ...plan, themes: lines.map((l, i) => { const [name, description] = split(l, ":"); return { name, description, why: plan.themes[i]?.why ?? "Edited by you" }; }) };
     case "schedule": return { ...plan, schedule: lines.map((l) => { const [time, activity] = split(l, " "); return { time, activity }; }) };

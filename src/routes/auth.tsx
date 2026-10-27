@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -80,7 +80,22 @@ function AuthPage() {
     navigate({ to: safeRedirect(redirect) });
   }
 
+  // After returning from Google (full-page redirect), the session is set on this page — move on.
+  useEffect(() => {
+    const go = () => {
+      const stored = sessionStorage.getItem("auth_redirect") ?? undefined;
+      sessionStorage.removeItem("auth_redirect");
+      void navigate({ to: safeRedirect(redirect ?? stored), replace: true });
+    };
+    supabase.auth.getSession().then(({ data }) => { if (data.session) go(); });
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) go();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [navigate, redirect]);
+
   async function google() {
+    if (redirect) sessionStorage.setItem("auth_redirect", redirect);
     const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/auth" });
     if (result.error) { toast.error("Google sign-in failed. Please try again."); return; }
     if (result.redirected) return;

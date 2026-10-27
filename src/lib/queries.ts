@@ -7,10 +7,10 @@ import { generateTasks, todayIso, addDays } from "./timeline";
 import type { EventFormValues } from "./validation";
 import type { EventPlan } from "./plan-schema";
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): NonNullable<T> {
+function unwrap<R extends { data: unknown; error: { message: string } | null }>(res: R): NonNullable<R["data"]> {
   if (res.error) throw new Error(res.error.message);
   if (res.data == null) throw new Error("Not found");
-  return res.data as NonNullable<T>;
+  return res.data as NonNullable<R["data"]>;
 }
 
 export const eventsQuery = () =>

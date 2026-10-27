@@ -1,29 +1,9 @@
-# Welcome to your Lovable project
+# Eventora AI
 
-This project was built with [Lovable](https://lovable.dev).
+AI-assisted planner for weddings, birthdays and community events: guided event wizard, AI plan (themes, schedule, budget split, vendors, ideas, milestones, contingencies), budget dashboard, timeline checklist, vendor tracker, ideas generator, PDF/CSV/print/share.
 
-## Build with Lovable
+- Run tests: `bun run test` (Vitest + Testing Library).
+- AI: server-side via Lovable AI (`LOVABLE_API_KEY`, server only), 20 generations/user/hour. "Load sample plan" / "Samples" produce clearly labelled template output.
+- Data: Lovable Cloud with per-user Row Level Security.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+Limitations: no Playwright test-runner suite yet; signed-in flows were not browser-verified by the agent.

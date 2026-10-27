@@ -236,6 +236,8 @@ export type Database = {
           due_date: string | null
           event_id: string
           id: string
+          notes: string
+          offset_days: number | null
           phase: string
           position: number
           priority: string
@@ -248,6 +250,8 @@ export type Database = {
           due_date?: string | null
           event_id: string
           id?: string
+          notes?: string
+          offset_days?: number | null
           phase?: string
           position?: number
           priority?: string
@@ -260,6 +264,8 @@ export type Database = {
           due_date?: string | null
           event_id?: string
           id?: string
+          notes?: string
+          offset_days?: number | null
           phase?: string
           position?: number
           priority?: string

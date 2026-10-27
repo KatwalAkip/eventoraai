@@ -28,7 +28,7 @@ interface Props {
 
 const COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: "warn" | "ok" }) {
+function Stat({ label, value, tone }: { label: string; value: string; tone?: "warn" | "ok" | undefined }) {
   return (
     <div className="rounded-xl border bg-card p-4 shadow-card">
       <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>

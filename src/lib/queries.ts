@@ -7,9 +7,10 @@ import { generateTasks, todayIso, addDays } from "./timeline";
 import type { EventFormValues } from "./validation";
 import type { EventPlan } from "./plan-schema";
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
+function unwrap<T>(res: { data: T | null; error: { message: string } | null }): NonNullable<T> {
   if (res.error) throw new Error(res.error.message);
-  return res.data as T;
+  if (res.data == null) throw new Error("Not found");
+  return res.data as NonNullable<T>;
 }
 
 export const eventsQuery = () =>
@@ -42,9 +43,10 @@ export const eventQuery = (id: string) =>
   queryOptions({
     queryKey: ["event", id],
     queryFn: async () => {
-      const event = unwrap(await supabase.from("events").select("*").eq("id", id).maybeSingle());
-      if (!event) throw new Error("Event not found");
-      return event;
+      const res = await supabase.from("events").select("*").eq("id", id).maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      if (!res.data) throw new Error("Event not found");
+      return res.data;
     },
   });
 
@@ -73,15 +75,17 @@ export const planQuery = (eventId: string) =>
   queryOptions({
     queryKey: ["plan", eventId],
     queryFn: async () =>
-      unwrap(
-        await supabase
-          .from("ai_plans")
-          .select("*")
-          .eq("event_id", eventId)
-          .order("updated_at", { ascending: false })
-          .limit(1)
-          .maybeSingle(),
-      ),
+{
+      const res = await supabase
+        .from("ai_plans")
+        .select("*")
+        .eq("event_id", eventId)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      return res.data;
+    },
   });
 
 export const savedIdeasQuery = () =>
@@ -205,12 +209,12 @@ export function useRowMutations<T extends Table>(table: T, eventId: string) {
   });
   const update = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: TablesUpdate<T> }) =>
-      unwrap(await supabase.from(table).update(patch as never).eq("id", id).select().single()),
+      unwrap(await supabase.from(table).update(patch as never).eq("id" as never, id as never).select().single()),
     onSuccess: refresh,
     onError: onErr,
   });
   const remove = useMutation({
-    mutationFn: async (id: string) => unwrap(await supabase.from(table).delete().eq("id", id).select("id")),
+    mutationFn: async (id: string) => unwrap(await supabase.from(table).delete().eq("id" as never, id as never).select("id")),
     onSuccess: refresh,
     onError: onErr,
   });

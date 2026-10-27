@@ -81,7 +81,8 @@ export function allocateByPercent(
   }));
   const target = round((t * Math.min(pctSum, 100)) / 100);
   const diff = round(target - out.reduce((s, x) => s + x.allocated, 0));
-  if (out.length) out[out.length - 1].allocated = round(out[out.length - 1].allocated + diff);
+  const last = out[out.length - 1];
+  if (last) last.allocated = round(last.allocated + diff);
   return out;
 }
 

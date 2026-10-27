@@ -134,7 +134,7 @@ const THEMES: Record<string, { name: string; description: string }[]> = {
 
 /** Deterministic, clearly-labelled sample plan used when live AI is unavailable. */
 export function buildDemoPlan(e: PlanInput): EventPlan {
-  const themes = (THEMES[e.event_type] ?? THEMES.birthday).map((t) => ({
+  const themes = (THEMES[e.event_type] ?? THEMES["birthday"] ?? []).map((t) => ({
     ...t,
     why: `Fits ${e.guest_count} guests${e.theme ? ` and your "${e.theme}" preference` : ""} within a ${e.currency} ${Math.round(e.total_budget).toLocaleString("en-US")} budget.`,
   }));

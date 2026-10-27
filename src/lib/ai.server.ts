@@ -25,7 +25,7 @@ export function friendlyAiError(status: number): string {
 
 /** Stream a structured response and return the validated object. Never retries automatically. */
 export async function generateStructured<T>(schema: z.ZodType<T>, prompt: string): Promise<unknown> {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new AiError("AI is not configured", 401);
   let upstreamStatus = 0;
   const provider = createOpenAI({

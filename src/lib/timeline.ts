@@ -5,7 +5,7 @@ const DAY = 86_400_000;
 /** Parse YYYY-MM-DD as a UTC date (no timezone drift). */
 export function parseDate(iso: string): Date {
   const [y, m, d] = iso.split("-").map(Number);
-  return new Date(Date.UTC(y, (m ?? 1) - 1, d ?? 1));
+  return new Date(Date.UTC(y ?? 1970, (m ?? 1) - 1, d ?? 1));
 }
 export function toIso(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -124,6 +124,7 @@ export function reorder<T extends { position: number }>(items: T[], index: numbe
   if (index < 0 || index >= items.length || target < 0 || target >= items.length) return items;
   const copy = [...items];
   const [moved] = copy.splice(index, 1);
+  if (!moved) return items;
   copy.splice(target, 0, moved);
   return copy.map((it, i) => ({ ...it, position: i }));
 }

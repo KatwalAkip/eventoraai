@@ -51,7 +51,7 @@ function Landing() {
                 <Button asChild size="lg" variant="ghost-dark"><a href="#features">See features</a></Button>
               </div>
             </div>
-            <img src={hero} alt="Candle-lit event table with ivory linen and violet florals at dusk" width={1600} height={1000} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl" />
+            <img src={hero} alt="Candle-lit event table with ivory linen and violet florals at dusk" width={1600} height={1008} className="aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl" />
           </div>
         </section>
         <section id="features" className="mx-auto max-w-6xl px-6 py-20">
